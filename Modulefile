@@ -1,0 +1,8 @@
+name    'winks-backup2l'
+version '0.0.1'
+source 'UNKNOWN'
+author 'winks'
+license 'BSD License'
+summary 'UNKNOWN'
+description 'create backups with backup2l via puppet'
+project_page 'https://github.com/winks/puppet-backup2l'
