@@ -1,6 +1,6 @@
 class backup2l::params {
-    case $::operatingsystem {
-        'ubuntu', 'debian': {
+    case $::osfamily {
+        'Debian': {
             $package_name  = 'backup2l'
             $src_list      = ['/etc', '/root', '/home', '/var/mail', '/usr/local']
             $backup_dir    = '/var/backups'

@@ -15,3 +15,7 @@ This will put backup2l into place with default settings:
   * `max_per_level = 8`
   * no `pre_backup`
   * no `post_backup`
+
+## Caveats
+
+  * For now only works on `$::osfamily == 'Debian'`.

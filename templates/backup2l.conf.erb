@@ -22,7 +22,7 @@ VOLNAME="all"
 
 # List of directories to make backups of.
 # All paths MUST be absolute and start with a '/'!
-SRCLIST=(<% if @src_list %><%= src_list.join(" ") -%><% end -%>)
+SRCLIST=(<% if @src_list %><%= @src_list.join(" ") -%><% end -%>)
 
 # The following expression specifies the files not to be archived.
 # See the find(1) man page for further info. It is discouraged to
@@ -59,7 +59,7 @@ SKIPCOND=(-path "*.nobackup*" -o -name "*.o")
 
 # Destination directory for backups;
 # it must exist and must not be the top-level of BACKUP_DEV
-BACKUP_DIR="<%= backup_dir -%>"
+BACKUP_DIR="<%= @backup_dir -%>"
 
 
 
@@ -67,10 +67,10 @@ BACKUP_DIR="<%= backup_dir -%>"
 # Backup parameters
 
 # Number of levels of differential backups (1..9)
-MAX_LEVEL=<%= max_level %>
+MAX_LEVEL=<%= @max_level %>
 
 # Maximum number of differential backups per level (1..9)
-MAX_PER_LEVEL=<%= max_per_level %>
+MAX_PER_LEVEL=<%= @max_per_level %>
 
 # Maximum number of full backups (1..8)
 MAX_FULL=2
@@ -99,7 +99,7 @@ PRE_BACKUP ()
     # all installed packages to a file.
     #echo "  writing dpkg selections to /root/dpkg-selections.log..."
     #dpkg --get-selections | diff - /root/dpkg-selections.log > /dev/null || dpkg --get-selections > /root/dpkg-selections.log
-<% if @pre_backup.count > 0 -%><% pre_backup.each do |pre| -%>
+<% if @pre_backup.count > 0 -%><% @pre_backup.each do |pre| -%>
     <%= pre %>
 <% end -%><% end -%>
 }
@@ -109,7 +109,7 @@ POST_BACKUP ()
 {
     # e. g., restart some mail/db server if its files are to be backup'ed
     echo "  post-backup: nothing to do"
-<% if @post_backup.count > 0 -%><% post_backup.each do |post| -%>
+<% if @post_backup.count > 0 -%><% @post_backup.each do |post| -%>
     <%= post %>
 <% end -%><% end -%>
 }
@@ -324,7 +324,7 @@ DRIVER_ZIP ()
 }
 
 
-# This driver uses tar and pipes the output trough gnupg. You can specifiy
+# This driver uses tar and pipes the output through gnupg. You can specifiy
 # the passphrase in a file (/etc/backup2l.pass in the example). You have to
 # invoke gpg at least one time before backup because gnupg has to initiate
 # first thing in the home directory.
@@ -345,7 +345,7 @@ DRIVER_TAR_GPG ()
             /usr/bin/gpg --batch --no-tty -q --passphrase-fd 3 3</etc/backup2l.pass -d $3 2>/dev/null | tar t | sed 's#^#/#'
             ;;
         -extract)       # Arguments: $2 = BID, $3 = archive file name, $4 = file list file
-             /usr/bin/gpg --batch --no-tty -q --passphrase-fd 3 3</etc/backup2l.pass -d $3 2>/dev/null | tar -x --same-permission --same-owner -f $3 -T $4 2>&1
+             /usr/bin/gpg --batch --no-tty -q --passphrase-fd 3 3</etc/backup2l.pass -d $3 2>/dev/null | tar -x --same-permission --same-owner -T $4 2>&1
             ;;
     esac
 }
